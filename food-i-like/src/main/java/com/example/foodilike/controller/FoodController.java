@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/foods")
 public class FoodController {
 
+    @Autowired
     FoodService foodService;
 
     public FoodController(FoodService foodService) {
@@ -36,8 +37,8 @@ public class FoodController {
     }
 
     @DeleteMapping
-    public Food deleteFood(@RequestBody Food food) {
-        return foodService.deleteFood(food);
+    public void deleteFood(@RequestBody long id) {
+        foodService.deleteFood(id);
     }
 
     @RequestMapping(value = "/food", method = RequestMethod.GET)
@@ -51,6 +52,19 @@ public class FoodController {
         return ResponseEntity.status(200).body(foods);
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity update(@RequestBody Food food, @PathVariable long id) {
+        Food existing = foodService.getById(id);
+
+        existing.setFoodName(food.getFoodName());
+        existing.setCalories(food.getCalories());
+
+        Food result = foodService.updateFood(existing);
+
+        return ResponseEntity.status(200).body(result);
+    }
 
 
 }

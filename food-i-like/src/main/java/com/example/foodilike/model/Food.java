@@ -1,23 +1,25 @@
 package com.example.foodilike.model;
 
-public class Food {
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import java.util.HashSet;
+import java.util.Set;
 
-    private long id;
+@Entity
+public class Food extends BaseEntity{
+
     private String foodName;
     private int calories;
 
-    public Food(long id, String food, int calories) {
-        this.id = id;
+    public Food(String food, int calories) {
         this.foodName = food;
         this.calories = calories;
     }
 
-    public long getId() {
-        return id;
-    }
+    public Food() {
 
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getFoodName() {
@@ -39,7 +41,7 @@ public class Food {
     @Override
     public String toString() {
         return "Food{" +
-                "id=" + id +
+                "id=" + this.getId() +
                 ", food='" + foodName + '\'' +
                 ", calories=" + calories +
                 '}';

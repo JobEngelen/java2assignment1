@@ -1,6 +1,8 @@
 package com.example.foodilike.service;
 
 import com.example.foodilike.model.Food;
+import com.example.foodilike.repository.FoodRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,42 +11,26 @@ import java.util.List;
 @Service
 public class FoodService {
 
-    private List<Food> foods = new ArrayList<Food>();
-
-    public FoodService() {
-        foods.add(new Food(1, "Pannenkoek", 227100));
-        foods.add(new Food(2, "Boerenkool", 500000));
-        foods.add(new Food(3, "Komkommersalade", 115000));
-        foods.add(new Food(4, "Een pruim", 45900));
-        foods.add(new Food(5, "Appeltaart", 237100));
-        foods.add(new Food(6, "Dadels", 281500));
-    }
+    @Autowired
+    private FoodRepository foodRepository;
 
     public List<Food> getAllFoods() {
-        return foods;
+        return (List<Food>) foodRepository.findAll();
+    }
+
+    public Food getById(long id) {
+        return foodRepository.findById(id).get();
     }
 
     public Food addFood(Food food) {
-        foods.add(food);
-        return food;
+        return foodRepository.save(food);
     }
 
     public Food updateFood(Food food) {
-        for (int i = 0; i < foods.size(); i++) {
-            if (foods.get(i).getId() == food.getId()) {
-                foods.get(i).setFoodName(food.getFoodName());
-                foods.get(i).setCalories(food.getCalories());
-            }
-        }
-        return food;
+        return foodRepository.save(food);
     }
 
-    public Food deleteFood(Food food) {
-        for (int i = 0; i < foods.size(); i++) {
-            if (foods.get(i).getId() == food.getId()) {
-                foods.remove(foods.get(i));
-            }
-        }
-        return food;
+    public void deleteFood(long id) {
+        foodRepository.deleteById(id);
     }
 }
